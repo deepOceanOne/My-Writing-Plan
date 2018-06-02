@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>错别字</title>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
+
+<div id="app">
+  <div class="toastContainer">
+    <div class="toast" v-for="tst in toastMessages" :style="{background: tst.toastBackground}">{{tst.state}}</div>
+  </div>
+  <button class="showMenu" @click="showMenu"><i class="fas fa-bars"></i>
+</button>
+  
+  
+  
+  <div class="text-wrapper" :style="{marginTop: item.style.spacing, marginBottom: item.style.spacing, marginLeft: item.style.spaceAround, marginRight: item.style.spaceAround}" v-for="(item, index) in items">
+    <h1 class="text read" title="Double click to edit text" v-show="item.readMode" :class="['text' + index]" :style="{color: item.style.color, fontSize: item.style.size, textAlign: item.style.align}" v-on:dblclick="edit(index)">{{ item.message }}</h1>
+    <form v-show="item.editMode" :style="{justifyContent: item.style.flexAlign}">
+      <input v-if="item.type == 'Title'":size="item.message.length + 1" class="text edit" :class="['textarea' + index]" type="text" v-model="item.message" @keydown.esc="cancel(index)" :style="{color: item.style.color,fontSize: item.style.size}">
+      <textarea v-if="item.type == 'Paragraph'" class="text edit" :class="['textarea' + index]" type="text" v-model="item.message" @keydown.esc="cancel(index)" :style="{color: item.style.color,fontSize: item.style.size, textAlign: item.style.align}"></textarea>
+      <button class="save" @click.prevent="save(index)"><i class="fas fa-check"></i>
+
+</button>
+      <button class="cancel" @click.prevent="cancel(index)"><i class="fas fa-undo-alt"></i>
+</button>
+      <button class="delete" @click.prevent="remove(index)"><i class="fas fa-times"></i></button>
+    </form>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="js/index.js"></script>
+
+</body>
+</html>

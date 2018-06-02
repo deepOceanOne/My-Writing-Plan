@@ -7,6 +7,9 @@ import pinyin
 import jieba
 import string
 import re
+# modified by jxc 20180602
+import web
+# modified end by jxc 20180602
 
 FILE_PATH = "./token_freq_pos%40350k_jieba.txt"
 PUNCTUATION_LIST = string.punctuation
@@ -106,20 +109,44 @@ def auto_correct_sentence( error_sentence, verbose=True):
 
 phrase_freq = construct_dict( FILE_PATH )
 
+# modified by jxc 20180602
+urls = (
+    '/','spell'
+)
+app = web.application(urls, globals())
+class spell:        
+    def GET(self):   
+        return 'Hello  !'
+    def POST(self):
+    	i = web.input()
+    	# print i.content
+    	web.header("Access-Control-Allow-Origin", "*")  
+    	err_sent_1 = i.content
+    	if not err_sent_1:
+    		err_sent_1 = "今天天启很好"
+    	correct_sent = auto_correct_sentence( err_sent_1 )
+    	return correct_sent
+    		
+# modified end by jxc 20180602
+
+
 def main():
 
-	err_sent_1 = '机七学习是人工智能领遇最能体现智能的一个分知！'
-	print "Test case 1:"
-	correct_sent = auto_correct_sentence( err_sent_1 )
-	print "original sentence:" + err_sent_1 + "\n==>\n" + "corrected sentence:" + correct_sent
+	#err_sent_1 = '机七学习是人工智能领遇最能体现智能的一个分知！'
+	#print "Test case 1:"
+	#correct_sent = auto_correct_sentence( err_sent_1 )
+	#print "original sentence:" + err_sent_1 + "\n==>\n" + "corrected sentence:" + correct_sent
 
-	err_sent_2 = '杭洲是中国的八大古都之一，因风景锈丽，享有"人间天棠"的美誉！'
-	print "Test case 2:"
-	correct_sent = auto_correct_sentence( err_sent_2 )
-	print "original sentence:" + err_sent_2 + "\n==>\n" + "corrected sentence:" + correct_sent
+	#err_sent_2 = '杭洲是中国的八大古都之一，因风景锈丽，享有"人间天棠"的美誉！'
+	#print "Test case 2:"
+	#correct_sent = auto_correct_sentence( err_sent_2 )
+	#print "original sentence:" + err_sent_2 + "\n==>\n" + "corrected sentence:" + correct_sent
 	
+	app.run()
+
 if __name__=="__main__":
 	reload(sys)
 	sys.setdefaultencoding('utf-8')
 	main()
+
 
