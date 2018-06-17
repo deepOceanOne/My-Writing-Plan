@@ -7,9 +7,10 @@ import pinyin
 import jieba
 import string
 import re
-# modified by jxc 20180602
+# modified by jxc 20180617
 import web
-# modified end by jxc 20180602
+import requests,json
+# modified end by jxc 20180617
 
 FILE_PATH = "./token_freq_pos%40350k_jieba.txt"
 PUNCTUATION_LIST = string.punctuation
@@ -104,6 +105,27 @@ def auto_correct_sentence( error_sentence, verbose=True):
 		correct_sentence += correct_phrase
 
 	return correct_sentence
+
+
+# this is a conseradible web sample for correcting 
+# 备用错别字api
+# modified by jxc 20180617
+def auto_correct_sentence_web( error_sentence, verbose=True):
+	msg_str = error_sentence.decode("utf-8")
+	payload = {
+    	"content" : msg_str,
+    	"mode": "advanced",
+    	"username" : "tester",
+    	"biz_type": "show"
+	}
+	url = 'http://api.CuoBieZi.net/spellcheck/json_check/json_phrase'
+	headers = {'content-type': 'application/json'}
+	response = requests.post(url, data=json.dumps(payload), headers=headers)
+	returned_json_str=response.json()
+	return json.dumps(returned_json_str, indent=4, sort_keys=True, ensure_ascii=False)
+# modified end by jxc 20180617
+
+
 
 
 
